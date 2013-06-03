@@ -1,19 +1,19 @@
-package Pastelaria;
+package pastelaria;
 
 public class Produto {
 	
-	private String codigo;
+	private int codigo;
 	private String nome;
 	private double preco;
 
-	public Produto(String codigo, String nome, double preco) {
+	public Produto(int codigo, String nome, double preco) {
 		// TODO Auto-generated constructor stub
 		this.codigo = codigo;
 		this.nome = nome;
 		this.preco = preco;
 	}
 
-	public String getCodigo() {
+	public int getCodigo() {
 		return codigo;
 	}
 
