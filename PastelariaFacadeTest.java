@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class PastelariaFacadeTest {
-	// for(Object o : listaDeObjetos){ FOR IT
+	
 	PastelariaFacade fachada;
 
 	@Before
@@ -38,7 +38,7 @@ public class PastelariaFacadeTest {
 		Assert.assertEquals(p4.getNome(), p2.getNome());
 	}
 
-	@Test(expected = ExcecaoEstoquePastelaria.class)
+	@Test(expected = ExcecaoPastelaria.class)
 	public void adicionarProdutoNoEstoqueComCodigoInexistente() {
 
 		Produto p1 = new Produto(2, "Cerveja", 4.0);
@@ -76,15 +76,82 @@ public class PastelariaFacadeTest {
 		Assert.assertTrue("O produto não foi removido", p5.getCodigo() == 0);
 	}
 
-	 @Test(expected = ExcecaoEstoquePastelaria.class)
-	 public void removerUmProdutoQueNaoExiste(){
-		 Produto p = null;
-		fachada.removerProduto(p);
-	 }
+	// @Test(expected = ExcecaoEstoquePastelaria.class)
+	// public void removerUmProdutoQueNaoExiste(){
+	// Produto p = null;
+	// fachada.removerProduto(p);
+	// }
 
 	// @Test
 	// public void visualizarProdutosNoEstoque(){
 
 	// }
+
+	@Test
+	public void adicionarUmClienteNoSistema() {
+
+		Cliente cliente = new Cliente("Renata", "32266279",
+				"R. Coração de Jesus", "Paróquia Santo Antonio");
+		fachada.adicionarClienteNoSistema(cliente);
+		Cliente cliente2 = fachada.pesquisarClienteNoSistema(cliente
+				.getTelefone());
+		Assert.assertTrue("Número de telefone inesperado",
+				cliente2.getTelefone() == "32266279");
+	}
+
+	@Test(expected = ExcecaoPastelaria.class)
+	public void adicionarClienteComTelefonesIguais() {
+
+		Cliente cliente = new Cliente("Renata", "32266279",
+				"R. Coração de Jesus", "Paróquia Santo Antonio");
+		fachada.adicionarClienteNoSistema(cliente);
+		Cliente cliente2 = new Cliente("João", "32266279",
+				"R. Coração de Jesus", "Paróquia Santo Antonio");
+		fachada.adicionarClienteNoSistema(cliente2);
+		Assert.assertTrue("Os telefones deveriam ser iguais",
+				cliente.getTelefone() == cliente2.getTelefone());
+	}
+
+	@Test
+	public void removerUmClienteDoSistema() {
+
+		Cliente cliente = new Cliente("Renata", "32266279",
+				"R. Coração de Jesus", "Paróquia Santo Antonio");
+		Cliente cliente2 = new Cliente("João", "86010671", "R. José Barbalho",
+				"Mercadinho Boa Vista");
+		fachada.adicionarClienteNoSistema(cliente);
+		fachada.adicionarClienteNoSistema(cliente2);
+
+		Assert.assertTrue("O cliente não foi removido",
+				fachada.isRemoverClienteDoSistema(cliente) == true);
+	}
+
+	@Test //rever!!!Acho que não estou testando nada
+	public void pesquisarClienteNoSistema() {
+		Cliente cliente = new Cliente("Renata", "32266279",
+				"R. Coração de Jesus", "Paróquia Santo Antonio");
+
+		Cliente cliente2 = new Cliente("João", "86010671",
+				"R. Coração de Jesus", "Paróquia Santo Antonio");
+
+		fachada.adicionarClienteNoSistema(cliente);
+		fachada.adicionarClienteNoSistema(cliente2);
+
+		Cliente cliente3 = fachada.pesquisarClienteNoSistema(cliente
+				.getTelefone());
+
+		Assert.assertTrue("O nome esperado era Renata",
+				cliente3.getNome() == "Renata");
+	}
+	
+	@Test (expected = ExcecaoPastelaria.class)//rever!!!Acho que não estou testando nada
+	public void pesquisarUmClienteInexistente(){
+		
+		Cliente cliente3 = fachada.pesquisarClienteNoSistema("9998877");
+		
+		Assert.assertEquals(null, cliente3.getNome() == "9998877");
+		
+		
+	}
 
 }

@@ -3,7 +3,7 @@ package pastelaria;
 public class PastelariaFacade {
 	
 	GerenteDeEstoquePastelaria estoque = new GerenteDeEstoquePastelaria();
-
+	GerenteDeEntregaDomicilio entrega = new GerenteDeEntregaDomicilio();
 
 	public void adicionarProduto(Produto p) {
 		// TODO Auto-generated method stub
@@ -18,6 +18,22 @@ public class PastelariaFacade {
 	public void removerProduto(Produto p) {
 		// TODO Auto-generated method stub
 		estoque.removerProduto(p);
+	}
+
+	public void adicionarClienteNoSistema(Cliente cliente) {
+		// TODO Auto-generated method stub
+		entrega.adicionarCliente(cliente);
+		
+	}
+
+	public Cliente pesquisarClienteNoSistema(String telefone) {
+		// TODO Auto-generated method stub
+		return entrega.pesquisarCliente(telefone);
+	}
+
+	public boolean isRemoverClienteDoSistema(Cliente cliente) {
+		// TODO Auto-generated method stub
+		return entrega.isRemoverCliente(cliente.getTelefone());
 	}
 	
 	
