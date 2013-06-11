@@ -1,7 +1,7 @@
 package pastelaria;
 
 public class Cliente {
-	
+
 	private String nome;
 	private String telefone;
 	private String endereço;
@@ -47,9 +47,5 @@ public class Cliente {
 		this.pontoRef = pontoRef;
 	}
 	
-	
-	
-	
-	
-
 }
+
