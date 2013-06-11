@@ -1,4 +1,4 @@
-package pastelaria;
+package excecao;
 
 public class ExcecaoPastelaria extends RuntimeException {
 	public ExcecaoPastelaria(String msg){

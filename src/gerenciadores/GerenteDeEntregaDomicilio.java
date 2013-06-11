@@ -1,7 +1,12 @@
-package pastelaria;
+package gerenciadores;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import excecao.ExcecaoPastelaria;
+
+
+import negocio.Cliente;
 
 
 

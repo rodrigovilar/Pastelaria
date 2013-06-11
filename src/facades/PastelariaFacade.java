@@ -1,4 +1,14 @@
-package pastelaria;
+package facades;
+
+import gerenciadores.GerenteDeCaixa;
+import gerenciadores.GerenteDeComanda;
+import gerenciadores.GerenteDeEntregaDomicilio;
+import gerenciadores.GerenteDeEstoquePastelaria;
+import negocio.Caixa;
+import negocio.Cliente;
+import negocio.Comanda;
+import negocio.ItemDeComanda;
+import negocio.Produto;
 
 public class PastelariaFacade {
 	
@@ -53,9 +63,9 @@ public class PastelariaFacade {
 		return entrega.isRemoverCliente(cliente.getTelefone());
 	}
 
-	public void adicionarItemNaComanda(Comanda c) {
+	public void adicionarItemNaComanda(int numMesa, ItemDeComanda item) {
 		
-		comanda.adicionarComanda(c);
+		comanda.adicionarItensNaComanda(numMesa, item);
 	}
 
 	public boolean removerItemDaComadanda(int numMesa, String codigo) {
@@ -63,14 +73,14 @@ public class PastelariaFacade {
 		return comanda.isRemoverProduto(numMesa, codigo);
 	}
 
-	public Comanda pesquisarItemNaComandaTest(int numMesa, String codigo) {
+	public ItemDeComanda pesquisarItemNaComandaTest(int numMesa, String codigo) {
 
 		return comanda.pesquisarItem(numMesa, codigo);
 	}
 
-	public void diminuiQtdeDeProdutoNaComanda(String codigo) {
+	public void diminuiQtdeDeProdutoNaComanda(int numMesa, ItemDeComanda item, int qtdeDiminuida) {
 		
-		comanda.diminuirItem(codigo);
+		comanda.diminuirItem(numMesa, item, qtdeDiminuida);
 	}
 
 	public String visulizarUmaComanda(int numMesa) {
@@ -91,6 +101,42 @@ public class PastelariaFacade {
 	public void realizarVenda(int numMesa, String codigo, int qtdeItem) {
 		// TODO Auto-generated method stub
 		caixa.realizarVenda(numMesa, codigo, qtdeItem);
+	}
+
+	public void adicionarComanda(Comanda c) {
+		// TODO Auto-generated method stub
+		comanda.adicionarComanda(c);
+	}
+
+	public Comanda pesquisarComanda(int i) {
+		// TODO Auto-generated method stub
+		return comanda.pesquisarComanda(i);
+	}
+
+	public int quantidadeDeComandasAbertas() {
+		// TODO Auto-generated method stub
+		return comanda.qtdeComandasAbertas();
+	}
+
+	public boolean removerComandaPermanentemente(int numMesa) {
+		// TODO Auto-generated method stub
+		return comanda.isRemoverComandaPermanentemente(numMesa);
+	}
+
+	public void atualizarCodigoProduto(String codigo, String novoCod) {
+		// TODO Auto-generated method stub
+		estoque.atualizarCodigoProduto(codigo, novoCod);
+		
+	}
+
+	public void atualizarNomeDoProduto(String codigo, String nome) {
+		// TODO Auto-generated method stub
+		estoque.atualizarNomeProduto(codigo, nome);
+	}
+
+	public void atualizarPrecoProduto(String codigo, double precoAtual) {
+		// TODO Auto-generated method stub
+		estoque.atualizarPrecoProduto(codigo, precoAtual);
 	}
 
 	

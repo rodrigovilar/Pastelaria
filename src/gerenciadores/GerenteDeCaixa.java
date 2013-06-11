@@ -1,13 +1,17 @@
-package pastelaria;
+package gerenciadores;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import excecao.ExcecaoPastelaria;
+
+
+import negocio.Caixa;
+
 public class GerenteDeCaixa {
 
 	private List<Caixa> caixasSalvos = new ArrayList<Caixa>();
-	private GerenteDeComanda comanda = new GerenteDeComanda();
-
+	
 	public void abrirCaixa(Caixa c) {
 
 		for (int i = 0; i < this.caixasSalvos.size(); i++) {
@@ -28,7 +32,7 @@ public class GerenteDeCaixa {
 			if (this.caixasSalvos.get(i).getDia() == dia
 					&& this.caixasSalvos.get(i).getMes() == mes
 					&& this.caixasSalvos.get(i).getAno() == ano) {
-				
+
 				return this.caixasSalvos.get(i);
 			}
 		}
@@ -36,15 +40,12 @@ public class GerenteDeCaixa {
 	}
 
 	public void realizarVenda(int numMesa, String codigo, int qtdeItem) {
-		
-		for(int i = 0; i < comanda.getComandas().size(); i++){
-			if(this.comanda.getComandas().get(i).getNumMesa()==numMesa){
-				
+
+			
+
 			}
-		}
 		
-	}
 
-
+	
 
 }

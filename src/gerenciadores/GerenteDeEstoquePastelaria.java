@@ -1,7 +1,12 @@
-package pastelaria;
+package gerenciadores;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import excecao.ExcecaoPastelaria;
+
+
+import negocio.Produto;
 
 public class GerenteDeEstoquePastelaria {
 
@@ -38,6 +43,8 @@ public class GerenteDeEstoquePastelaria {
 
 	}
 	
+	
+	
 	public boolean isRemoverProduto(String codigo) {
 		
 		Produto p = this.pesquisarProduto(codigo);
@@ -56,8 +63,7 @@ public class GerenteDeEstoquePastelaria {
 		for (int i = 0; i < listaDeProdutos.size(); i++) {
 			if (this.listaDeProdutos.get(i).getCodigo() == codigo) {
 				int aux= listaDeProdutos.get(i).getQtdeProduto();
-				int qtde=1;
-				listaDeProdutos.get(i).setQtdeProduto(aux-qtde);
+				listaDeProdutos.get(i).setQtdeProduto(aux-1);
 			}
 		}
 		
@@ -66,6 +72,34 @@ public class GerenteDeEstoquePastelaria {
 	public String visualizarProduto() {
 		
 		return listaDeProdutos.toString() ;
+	}
+
+	public void atualizarCodigoProduto(String codigo, String novoCod) {
+		
+		for (Produto produto : listaDeProdutos){
+			if (produto.getCodigo().equals(codigo)){
+				produto.setCodigo(novoCod);
+			}
+		}
+	}
+
+	public void atualizarNomeProduto(String codigo, String nome) {
+		// TODO Auto-generated method stub
+		for (Produto produto : listaDeProdutos){
+			if (produto.getCodigo().equals(codigo)){
+				produto.setNome(nome);
+			}
+		}
+		
+	}
+
+	public void atualizarPrecoProduto(String codigo, double precoAtual) {
+		// TODO Auto-generated method stub
+		for (Produto produto : listaDeProdutos){
+			if (produto.getCodigo().equals(codigo)){
+				produto.setPreco(precoAtual);
+			}
+		}
 	}
 
 }

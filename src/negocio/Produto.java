@@ -1,4 +1,4 @@
-package pastelaria;
+package negocio;
 
 public class Produto {
 	

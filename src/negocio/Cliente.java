@@ -1,17 +1,17 @@
-package pastelaria;
+package negocio;
 
 public class Cliente {
 
 	private String nome;
 	private String telefone;
-	private String endereço;
+	private String endereco;
 	private String pontoRef;
 	
 	public Cliente(String nome, String telefone, String endereço, String pontoRef) {
 		
 		this.nome = nome;
 		this.telefone = telefone;
-		this.endereço = endereço;
+		this.endereco = endereço;
 		this.pontoRef = pontoRef;
 	}
 
@@ -32,11 +32,11 @@ public class Cliente {
 	}
 
 	public String getEndereço() {
-		return endereço;
+		return endereco;
 	}
 
 	public void setEndereço(String endereço) {
-		this.endereço = endereço;
+		this.endereco = endereço;
 	}
 
 	public String getPontoRef() {
