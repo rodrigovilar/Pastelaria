@@ -1,5 +1,7 @@
 package facades;
 
+import java.util.List;
+
 import gerenciadores.GerenteDeCaixa;
 import gerenciadores.GerenteDeComanda;
 import gerenciadores.GerenteDeEntregaDomicilio;
@@ -26,9 +28,9 @@ public class PastelariaFacade {
 		return estoque.pesquisarProduto(codigo);
 	}
 
-	public void atualizarQtdeDeUmProdutoNoEstoque(String codigo, int qtde) {
+	public void adicionarQtdeDeUmProdutoNoEstoque(String codigo, int qtde) {
 		
-		estoque.atualizarQtdeProduto(codigo, qtde);
+		estoque.adicionarQtdeProduto(codigo, qtde);
 	}
 
 	public boolean removerProdutoPermanentemente(String codigo) {
@@ -36,9 +38,9 @@ public class PastelariaFacade {
 		return estoque.isRemoverProduto(codigo);
 	}
 
-	public void diminuirQtdeDeUmProduto(String codigo) {
+	public void diminuirQtdeDeUmProduto(String codigo, int qtde) {
 		
-		estoque.diminuirQtdeProduto(codigo);
+		estoque.diminuirQtdeProduto(codigo, qtde);
 		
 	}
 
@@ -68,9 +70,9 @@ public class PastelariaFacade {
 		comanda.adicionarItensNaComanda(numMesa, item);
 	}
 
-	public boolean removerItemDaComadanda(int numMesa, String codigo) {
+	public boolean removerItemDaComadanda(Comanda c, String codigo) {
 		
-		return comanda.isRemoverProduto(numMesa, codigo);
+		return comanda.isRemoverItem(c, codigo);
 	}
 
 	public ItemDeComanda pesquisarItemNaComandaTest(int numMesa, String codigo) {
@@ -115,7 +117,7 @@ public class PastelariaFacade {
 
 	public int quantidadeDeComandasAbertas() {
 		// TODO Auto-generated method stub
-		return comanda.qtdeComandasAbertas();
+		return comanda.getComandas().size();
 	}
 
 	public boolean removerComandaPermanentemente(int numMesa) {
@@ -123,22 +125,17 @@ public class PastelariaFacade {
 		return comanda.isRemoverComandaPermanentemente(numMesa);
 	}
 
-	public void atualizarCodigoProduto(String codigo, String novoCod) {
+	
+	public Produto atualizarProduto(String codigo, Produto produtoAtual) {
 		// TODO Auto-generated method stub
-		estoque.atualizarCodigoProduto(codigo, novoCod);
+		return estoque.atualizarProdutoNoEstoque(codigo, produtoAtual);
+	}
+
+	public List <Comanda> visualizarComanda() {
+		return comanda.getComandas();
+		// TODO Auto-generated method stub
 		
 	}
 
-	public void atualizarNomeDoProduto(String codigo, String nome) {
-		// TODO Auto-generated method stub
-		estoque.atualizarNomeProduto(codigo, nome);
-	}
-
-	public void atualizarPrecoProduto(String codigo, double precoAtual) {
-		// TODO Auto-generated method stub
-		estoque.atualizarPrecoProduto(codigo, precoAtual);
-	}
-
-	
 
 }

@@ -8,6 +8,7 @@ import excecao.ExcecaoPastelaria;
 
 import negocio.Comanda;
 import negocio.ItemDeComanda;
+import negocio.Produto;
 
 public class GerenteDeComanda {
 
@@ -67,12 +68,12 @@ public class GerenteDeComanda {
 		throw new ExcecaoPastelaria("O item não existe");
 	}
 
-	public boolean isRemoverProduto(int numMesa, String codigo) {
+	public boolean isRemoverItem(Comanda c, String codigo) {
 
-		ItemDeComanda item = this.pesquisarItem(numMesa, codigo);
-
+		ItemDeComanda item = this.pesquisarItem(c.getNumMesa(), codigo);
+		
 		if (item != null) {
-			this.comandas.remove(item);
+			c.getItens().remove(item);
 			return true;
 		} else {
 
@@ -121,10 +122,7 @@ public class GerenteDeComanda {
 		throw new ExcecaoPastelaria("A comanda não existe");
 	}
 
-	public int qtdeComandasAbertas() {
 	
-		return comandas.size();
-	}
 
 	public boolean isRemoverComandaPermanentemente(int numMesa) {
 		// TODO Auto-generated method stub

@@ -32,7 +32,7 @@ public class GerenteDeEstoquePastelaria {
 		throw new ExcecaoPastelaria("O produto não existe");
 	}
 
-	public void atualizarQtdeProduto(String codigo, int qtde) {
+	public void adicionarQtdeProduto(String codigo, int qtde) {
 
 		for (int i = 0; i < listaDeProdutos.size(); i++) {
 			if (this.listaDeProdutos.get(i).getCodigo() == codigo) {
@@ -42,9 +42,7 @@ public class GerenteDeEstoquePastelaria {
 		}
 
 	}
-	
-	
-	
+		
 	public boolean isRemoverProduto(String codigo) {
 		
 		Produto p = this.pesquisarProduto(codigo);
@@ -58,12 +56,12 @@ public class GerenteDeEstoquePastelaria {
 		}
 	}
 
-	public void diminuirQtdeProduto(String codigo) {
+	public void diminuirQtdeProduto(String codigo, int qtde) {
 		
 		for (int i = 0; i < listaDeProdutos.size(); i++) {
 			if (this.listaDeProdutos.get(i).getCodigo() == codigo) {
 				int aux= listaDeProdutos.get(i).getQtdeProduto();
-				listaDeProdutos.get(i).setQtdeProduto(aux-1);
+				listaDeProdutos.get(i).setQtdeProduto(aux-qtde);
 			}
 		}
 		
@@ -74,32 +72,19 @@ public class GerenteDeEstoquePastelaria {
 		return listaDeProdutos.toString() ;
 	}
 
-	public void atualizarCodigoProduto(String codigo, String novoCod) {
+	
+
+	public Produto atualizarProdutoNoEstoque(String codigo, Produto produtoAtual) {
 		
 		for (Produto produto : listaDeProdutos){
 			if (produto.getCodigo().equals(codigo)){
-				produto.setCodigo(novoCod);
+				produto.setNome(produtoAtual.getNome());
+				produto.setPreco(produtoAtual.getPreco());
+				produto.setQtdeProduto(produtoAtual.getQtdeProduto());
 			}
 		}
-	}
-
-	public void atualizarNomeProduto(String codigo, String nome) {
-		// TODO Auto-generated method stub
-		for (Produto produto : listaDeProdutos){
-			if (produto.getCodigo().equals(codigo)){
-				produto.setNome(nome);
-			}
-		}
-		
-	}
-
-	public void atualizarPrecoProduto(String codigo, double precoAtual) {
-		// TODO Auto-generated method stub
-		for (Produto produto : listaDeProdutos){
-			if (produto.getCodigo().equals(codigo)){
-				produto.setPreco(precoAtual);
-			}
-		}
+		return produtoAtual;
+	
 	}
 
 }

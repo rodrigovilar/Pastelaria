@@ -1,5 +1,8 @@
 package testes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.Assert;
 
 import negocio.Caixa;
@@ -13,6 +16,7 @@ import org.junit.Test;
 
 import excecao.ExcecaoPastelaria;
 import facades.PastelariaFacade;
+import gerenciadores.GerenteDeComanda;
 
 public class PastelariaFacadeTest {
 
@@ -30,7 +34,8 @@ public class PastelariaFacadeTest {
 		fachada.cadastrarProduto(p);
 
 		Produto p2 = fachada.pesquisarProdutoNoEstoque(p.getCodigo());
-		Assert.assertEquals(p2.getCodigo(), p.getCodigo());
+		Assert.assertEquals(p2, p );
+		
 	}
 
 	@Test
@@ -44,7 +49,7 @@ public class PastelariaFacadeTest {
 
 		Produto p4 = fachada.pesquisarProdutoNoEstoque(p2.getCodigo());
 
-		Assert.assertEquals(p4.getNome(), p2.getNome());
+		Assert.assertEquals(p4, p2);
 	}
 
 	@Test(expected = ExcecaoPastelaria.class)
@@ -58,8 +63,10 @@ public class PastelariaFacadeTest {
 
 	}
 
+
+
 	@Test
-	public void atualizarNomeProduto() {
+	public void adicionarQtdeDeUmProdutoNoEstoqueTest() {
 
 		Produto p1 = new Produto("2", "Cerveja", 4.0, 3);
 		Produto p2 = new Produto("3", "Suco", 3.0, 3);
@@ -67,52 +74,22 @@ public class PastelariaFacadeTest {
 		fachada.cadastrarProduto(p1);
 		fachada.cadastrarProduto(p2);
 
-		fachada.atualizarNomeDoProduto(p1.getCodigo(), "Long Neck");
-
-		Assert.assertTrue("O codigo não foi modificado",
-				p1.getNome() == "Long Neck");
-	}
-
-	@Test
-	public void atualizarQtdeDeUmProdutosNoEstoqueTest() {
-
-		Produto p1 = new Produto("2", "Cerveja", 4.0, 3);
-		Produto p2 = new Produto("3", "Suco", 3.0, 3);
-
-		fachada.cadastrarProduto(p1);
-		fachada.cadastrarProduto(p2);
-
-		fachada.atualizarQtdeDeUmProdutoNoEstoque("2", 5);
+		fachada.adicionarQtdeDeUmProdutoNoEstoque("2", 5);
 
 		Assert.assertTrue("Esperava obter 8", p1.getQtdeProduto() == 8);
 	}
-
+		
 	@Test
-	public void atualizarCodigoProdutoTest() {
-
-		Produto p1 = new Produto("2", "Cerveja", 4.0, 3);
-		Produto p2 = new Produto("3", "Suco", 3.0, 3);
-
+	public void atualizarProdutoTest(){
+		
+		Produto p1 = new Produto("23", "Pastel Especial", 11.0, 45);
 		fachada.cadastrarProduto(p1);
-		fachada.cadastrarProduto(p2);
-
-		fachada.atualizarCodigoProduto(p1.getCodigo(), "4");
-
-		Assert.assertTrue("O codigo não foi modificado", p1.getCodigo() == "4");
-	}
-
-	@Test
-	public void atualizarPrecoProdutoTest() {
-
-		Produto p1 = new Produto("2", "Cerveja", 4.0, 3);
-		Produto p2 = new Produto("3", "Suco", 3.0, 3);
-
-		fachada.cadastrarProduto(p1);
-		fachada.cadastrarProduto(p2);
-
-		fachada.atualizarPrecoProduto(p1.getCodigo(), 4.5);
-
-		Assert.assertTrue("O codigo não foi modificado", p1.getPreco() == 4.5);
+		Produto p2 = new Produto("23", "Suco", 3.0, 3);
+		
+		Produto p3 = fachada.atualizarProduto (p1.getCodigo(), p2);
+		
+		Assert.assertEquals(p2, p3);
+	
 	}
 
 	@Test
@@ -125,7 +102,7 @@ public class PastelariaFacadeTest {
 		fachada.cadastrarProduto(p2);
 
 		Assert.assertTrue("O produto não foi removido, a assertiva deu false",
-				fachada.removerProdutoPermanentemente(p2.getCodigo()) == true);
+				fachada.removerProdutoPermanentemente(p2.getCodigo()));
 
 	}
 
@@ -138,7 +115,7 @@ public class PastelariaFacadeTest {
 		fachada.cadastrarProduto(p);
 		fachada.cadastrarProduto(p2);
 
-		fachada.diminuirQtdeDeUmProduto("3");
+		fachada.diminuirQtdeDeUmProduto("3", 1);
 
 		Assert.assertTrue("Não esta diminuindo o produto do estoque",
 				p2.getQtdeProduto() == 2);
@@ -152,9 +129,8 @@ public class PastelariaFacadeTest {
 
 		fachada.cadastrarProduto(p);
 		fachada.cadastrarProduto(p2);
-
-		Assert.assertFalse("O produto não foi removido, a assertiva deu false",
-				fachada.removerProdutoPermanentemente("5") == false);
+		
+		fachada.removerProdutoPermanentemente("5");
 	}
 
 	@Test(expected = ExcecaoPastelaria.class)
@@ -167,8 +143,8 @@ public class PastelariaFacadeTest {
 		fachada.cadastrarProduto(p2);
 
 		Produto p3 = fachada.pesquisarProdutoNoEstoque("5");
-		// teste furado
-		Assert.assertTrue("O objeto não deveria existir", p3 == null);
+		fachada.pesquisarProdutoNoEstoque(p3.getCodigo());
+		
 	}
 
 	@Test
@@ -179,8 +155,7 @@ public class PastelariaFacadeTest {
 		fachada.adicionarClienteNoSistema(cliente);
 		Cliente cliente2 = fachada.pesquisarClienteNoSistema(cliente
 				.getTelefone());
-		Assert.assertTrue("Número de telefone inesperado",
-				cliente2.getTelefone() == "32266279");
+		Assert.assertEquals(cliente, cliente2);
 	}
 
 	@Test(expected = ExcecaoPastelaria.class)
@@ -192,8 +167,7 @@ public class PastelariaFacadeTest {
 		Cliente cliente2 = new Cliente("João", "32266279",
 				"R. Coração de Jesus", "Paróquia Santo Antonio");
 		fachada.adicionarClienteNoSistema(cliente2);
-		Assert.assertTrue("Os telefones deveriam ser iguais",
-				cliente.getTelefone() == cliente2.getTelefone());
+		
 	}
 
 	@Test
@@ -280,14 +254,15 @@ public class PastelariaFacadeTest {
 		fachada.adicionarComanda(c2);
 		fachada.adicionarComanda(c3);
 		fachada.adicionarComanda(c4);
-
-		int qtde = fachada.quantidadeDeComandasAbertas();
-
+		
 		fachada.adicionarItemNaComanda(20, item);
 		fachada.adicionarItemNaComanda(30, item2);
 
-		Assert.assertEquals(5, qtde);
-
+		Assert.assertEquals(5, fachada.quantidadeDeComandasAbertas());
+		//Rodrigo, você tinha reclamado porque tinha este método
+		//Modifiquei o método na fachada, onde ele chama o getComanda().size
+		//Este método foi criado porque nos testes só podemos inicializar a fachada, certo?
+		//A não ser que não precise deste teste, para saber como a lista de comandas está se comportando...
 	}
 
 	@Test
@@ -394,6 +369,13 @@ public class PastelariaFacadeTest {
 				(item1 == item2) && (item3 == item4) && (item5 == item));
 
 	}
+	
+	/*Um mesmo item pertence a várias comandas é estranho.
+
+	Problemas com a montagem do cenário de teste 3 pontos
+	
+	Rodrigo, você tinha questionado isso, este 
+	 * */
 
 	@Test
 	public void removerItemDaComandaTest() {
@@ -412,9 +394,11 @@ public class PastelariaFacadeTest {
 
 		fachada.adicionarItemNaComanda(20, item);
 		fachada.adicionarItemNaComanda(20, item2);
-
-		Assert.assertEquals(true, fachada.removerItemDaComadanda(20, item
-				.getProduto().getCodigo()));
+		
+		fachada.removerItemDaComadanda(c, item.getProduto().getCodigo());
+		
+		
+		Assert.assertEquals(c.getItens().size(), 1);
 	}
 
 	@Test(expected = ExcecaoPastelaria.class)
@@ -436,7 +420,7 @@ public class PastelariaFacadeTest {
 		fachada.adicionarItemNaComanda(8, item);
 		fachada.adicionarItemNaComanda(8, item2);
 
-		fachada.removerProdutoPermanentemente("5");
+		fachada.removerItemDaComadanda(c, "5");
 	}
 
 	@Test
@@ -492,27 +476,11 @@ public class PastelariaFacadeTest {
 	@Test(expected = ExcecaoPastelaria.class)
 	public void adicionarComandaComNumMesaIguaisTest() {
 
-		Produto p1 = new Produto("2", "Cerveja", 4.0, 3);
-		Produto p2 = new Produto("3", "Suco", 3.0, 3);
-		Produto p3 = new Produto("5", "Pastel de Carne", 3.0, 3);
-
-		fachada.cadastrarProduto(p1);
-		fachada.cadastrarProduto(p2);
-		fachada.cadastrarProduto(p3);
-
-		ItemDeComanda item = new ItemDeComanda(p1, 2);
-		ItemDeComanda item2 = new ItemDeComanda(p2, 4);
-		ItemDeComanda item3 = new ItemDeComanda(p3, 90);
-
 		Comanda c = new Comanda(9);
 		Comanda c1 = new Comanda(9);
 
 		fachada.adicionarComanda(c1);
 		fachada.adicionarComanda(c);
-
-		fachada.adicionarItemNaComanda(9, item);
-		fachada.adicionarItemNaComanda(9, item2);
-		fachada.adicionarItemNaComanda(9, item3);
 
 	}
 
