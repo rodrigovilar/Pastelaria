@@ -1,5 +1,8 @@
 package negocio;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Caixa {
 	
 	private int dia;
@@ -7,14 +10,17 @@ public class Caixa {
 	private int ano;
 	private double dinheiroInicioDia;
 	private double dinheiroFimDia;
+	private boolean status;
+	private List <ValorRecebido> valores = new ArrayList <ValorRecebido>();
 	
-	public Caixa(int dia, int mes, int ano, double dinheiroInicioDia, double dinheiroFimDia) {
+	public Caixa(int dia, int mes, int ano, double dinheiroInicioDia, double dinheiroFimDia, boolean status) {
 		
 		this.dia = dia;
 		this.mes = mes;
 		this.ano = ano;
 		this.dinheiroInicioDia = dinheiroInicioDia;
 		this.dinheiroFimDia = dinheiroFimDia = 0;
+		this.status = status;
 	}
 
 	public int getDia() {
@@ -56,4 +62,22 @@ public class Caixa {
 	public void setDinheiroFimDia(double dinheiroFimDia) {
 		this.dinheiroFimDia = dinheiroFimDia;
 	}
+	
+	public List<ValorRecebido> getValores() {
+		return valores;
+	}
+
+	public void setValores(List<ValorRecebido> valores) {
+		this.valores = valores;
+	}
+
+	public boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+	
+	
 }

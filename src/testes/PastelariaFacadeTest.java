@@ -17,6 +17,7 @@ import org.junit.Test;
 import excecao.ExcecaoPastelaria;
 import facades.PastelariaFacade;
 import gerenciadores.GerenteDeComanda;
+import gerenciadores.Recebimento;
 
 public class PastelariaFacadeTest {
 
@@ -34,8 +35,8 @@ public class PastelariaFacadeTest {
 		fachada.cadastrarProduto(p);
 
 		Produto p2 = fachada.pesquisarProdutoNoEstoque(p.getCodigo());
-		Assert.assertEquals(p2, p );
-		
+		Assert.assertEquals(p2, p);
+
 	}
 
 	@Test
@@ -63,8 +64,6 @@ public class PastelariaFacadeTest {
 
 	}
 
-
-
 	@Test
 	public void adicionarQtdeDeUmProdutoNoEstoqueTest() {
 
@@ -78,18 +77,18 @@ public class PastelariaFacadeTest {
 
 		Assert.assertTrue("Esperava obter 8", p1.getQtdeProduto() == 8);
 	}
-		
+
 	@Test
-	public void atualizarProdutoTest(){
-		
+	public void atualizarProdutoTest() {
+
 		Produto p1 = new Produto("23", "Pastel Especial", 11.0, 45);
 		fachada.cadastrarProduto(p1);
 		Produto p2 = new Produto("23", "Suco", 3.0, 3);
-		
-		Produto p3 = fachada.atualizarProduto (p1.getCodigo(), p2);
-		
+
+		Produto p3 = fachada.atualizarProduto(p1.getCodigo(), p2);
+
 		Assert.assertEquals(p2, p3);
-	
+
 	}
 
 	@Test
@@ -129,7 +128,7 @@ public class PastelariaFacadeTest {
 
 		fachada.cadastrarProduto(p);
 		fachada.cadastrarProduto(p2);
-		
+
 		fachada.removerProdutoPermanentemente("5");
 	}
 
@@ -144,7 +143,7 @@ public class PastelariaFacadeTest {
 
 		Produto p3 = fachada.pesquisarProdutoNoEstoque("5");
 		fachada.pesquisarProdutoNoEstoque(p3.getCodigo());
-		
+
 	}
 
 	@Test
@@ -167,7 +166,7 @@ public class PastelariaFacadeTest {
 		Cliente cliente2 = new Cliente("João", "32266279",
 				"R. Coração de Jesus", "Paróquia Santo Antonio");
 		fachada.adicionarClienteNoSistema(cliente2);
-		
+
 	}
 
 	@Test
@@ -254,15 +253,17 @@ public class PastelariaFacadeTest {
 		fachada.adicionarComanda(c2);
 		fachada.adicionarComanda(c3);
 		fachada.adicionarComanda(c4);
-		
+
 		fachada.adicionarItemNaComanda(20, item);
 		fachada.adicionarItemNaComanda(30, item2);
 
 		Assert.assertEquals(5, fachada.quantidadeDeComandasAbertas());
-		//Rodrigo, você tinha reclamado porque tinha este método
-		//Modifiquei o método na fachada, onde ele chama o getComanda().size
-		//Este método foi criado porque nos testes só podemos inicializar a fachada, certo?
-		//A não ser que não precise deste teste, para saber como a lista de comandas está se comportando...
+		// Rodrigo, você tinha reclamado porque tinha este método
+		// Modifiquei o método na fachada, onde ele chama o getComanda().size
+		// Este método foi criado porque nos testes só podemos inicializar a
+		// fachada, certo?
+		// A não ser que não precise deste teste, para saber como a lista de
+		// comandas está se comportando...
 	}
 
 	@Test
@@ -369,13 +370,14 @@ public class PastelariaFacadeTest {
 				(item1 == item2) && (item3 == item4) && (item5 == item));
 
 	}
-	
-	/*Um mesmo item pertence a várias comandas é estranho.
 
-	Problemas com a montagem do cenário de teste 3 pontos
-	
-	Rodrigo, você tinha questionado isso, este 
-	 * */
+	/*
+	 * Um mesmo item pertence a várias comandas é estranho.
+	 * 
+	 * Problemas com a montagem do cenário de teste 3 pontos
+	 * 
+	 * Rodrigo, você tinha questionado isso, este
+	 */
 
 	@Test
 	public void removerItemDaComandaTest() {
@@ -394,10 +396,9 @@ public class PastelariaFacadeTest {
 
 		fachada.adicionarItemNaComanda(20, item);
 		fachada.adicionarItemNaComanda(20, item2);
-		
+
 		fachada.removerItemDaComadanda(c, item.getProduto().getCodigo());
-		
-		
+
 		Assert.assertEquals(c.getItens().size(), 1);
 	}
 
@@ -414,7 +415,7 @@ public class PastelariaFacadeTest {
 		ItemDeComanda item2 = new ItemDeComanda(p2, 4);
 
 		Comanda c = new Comanda(8);
-		
+
 		fachada.adicionarComanda(c);
 
 		fachada.adicionarItemNaComanda(8, item);
@@ -502,7 +503,7 @@ public class PastelariaFacadeTest {
 	@Test
 	public void abrirCaixaTest() {
 
-		Caixa caixa = new Caixa(10, 04, 2013, 51.99, 0);
+		Caixa caixa = new Caixa(10, 04, 2013, 51.99, 0, false);
 		fachada.abrirCaixa(caixa);
 
 		Caixa caixa2 = fachada.pesquisarCaixaSalvo(caixa.getDia(),
@@ -515,17 +516,17 @@ public class PastelariaFacadeTest {
 	@Test(expected = ExcecaoPastelaria.class)
 	public void abrirCaixaComDiaMesAnoJaExistente() {
 
-		Caixa caixa = new Caixa(10, 04, 2013, 51.99, 0);
+		Caixa caixa = new Caixa(10, 04, 2013, 51.99, 0, false);
 		fachada.abrirCaixa(caixa);
 
-		Caixa caixa2 = new Caixa(10, 04, 2013, 51.99, 0);
+		Caixa caixa2 = new Caixa(10, 04, 2013, 51.99, 0, false);
 		fachada.abrirCaixa(caixa2);
 	}
 
 	@Test(expected = ExcecaoPastelaria.class)
 	public void pesquisarUmaDataDeCaixaInexistente() {
 
-		Caixa caixa = new Caixa(10, 04, 2013, 51.99, 0);
+		Caixa caixa = new Caixa(10, 04, 2013, 51.99, 0, false);
 		fachada.abrirCaixa(caixa);
 
 		fachada.pesquisarCaixaSalvo(10, 04, 2014);
@@ -535,7 +536,7 @@ public class PastelariaFacadeTest {
 	@Test
 	public void pesquisarCaixaSalvoTest() {
 
-		Caixa caixa = new Caixa(10, 04, 2013, 51.99, 0);
+		Caixa caixa = new Caixa(10, 04, 2013, 51.99, 0, false);
 		fachada.abrirCaixa(caixa);
 
 		Caixa caixa2 = fachada.pesquisarCaixaSalvo(caixa.getDia(),
@@ -544,6 +545,154 @@ public class PastelariaFacadeTest {
 		Assert.assertTrue(
 				"O dia deveria ser 10 e o dinheiro inicial deveria ser 51.99",
 				caixa2.getDia() == 10 && caixa2.getDinheiroInicioDia() == 51.99);
+	}
+
+	@Test
+	public void fecharValorTotalDeUmaComandaComUmItemDeCadaTest() {
+
+		Produto p1 = new Produto("2", "Cerveja", 4.0, 30);
+		Produto p2 = new Produto("3", "Suco", 3.0, 30);
+		Produto p3 = new Produto("36", "Pastel Especial", 11.0, 10);
+		Produto p4 = new Produto("100", "Refrigerante lata", 3.5, 80);
+
+		fachada.cadastrarProduto(p1);
+		fachada.cadastrarProduto(p2);
+		fachada.cadastrarProduto(p3);
+		fachada.cadastrarProduto(p4);
+
+		Comanda c = new Comanda(9);
+
+		fachada.adicionarComanda(c);
+
+		ItemDeComanda item = new ItemDeComanda(p1, 1);
+		ItemDeComanda item2 = new ItemDeComanda(p2, 1);
+		ItemDeComanda item3 = new ItemDeComanda(p3, 1);
+		ItemDeComanda item4 = new ItemDeComanda(p4, 1);
+
+		fachada.adicionarItemNaComanda(9, item);
+		fachada.adicionarItemNaComanda(9, item2);
+		fachada.adicionarItemNaComanda(9, item3);
+		fachada.adicionarItemNaComanda(9, item4);
+
+		double valor = fachada.fecharValorTotalDaComandaComPorcentagem(c);
+
+		Assert.assertEquals(23.65, valor);
+
+	}
+
+	@Test
+	public void fecharValorTotalDeUmaComandaComVariosItemDeCadaTest() {
+
+		Produto p1 = new Produto("2", "Cerveja", 4.0, 30);
+		Produto p2 = new Produto("3", "Suco", 3.0, 30);
+		Produto p3 = new Produto("36", "Pastel Especial", 11.0, 10);
+		Produto p4 = new Produto("100", "Refrigerante lata", 3.5, 80);
+
+		fachada.cadastrarProduto(p1);
+		fachada.cadastrarProduto(p2);
+		fachada.cadastrarProduto(p3);
+		fachada.cadastrarProduto(p4);
+
+		Comanda c = new Comanda(9);
+
+		fachada.adicionarComanda(c);
+
+		ItemDeComanda item = new ItemDeComanda(p1, 10);
+		ItemDeComanda item2 = new ItemDeComanda(p2, 13);
+		ItemDeComanda item3 = new ItemDeComanda(p3, 15);
+		ItemDeComanda item4 = new ItemDeComanda(p4, 18);
+
+		fachada.adicionarItemNaComanda(9, item);
+		fachada.adicionarItemNaComanda(9, item2);
+		fachada.adicionarItemNaComanda(9, item3);
+		fachada.adicionarItemNaComanda(9, item4);
+
+		double valor = fachada.fecharValorTotalDaComandaComPorcentagem(c);
+
+		Assert.assertEquals(337.7, valor);
+
+	}
+
+	@Test
+	public void retirarDezPorCentoDaComandaTest() {
+
+		Produto p1 = new Produto("2", "Cerveja", 4.0, 30);
+		Produto p2 = new Produto("3", "Suco", 3.0, 30);
+		Produto p3 = new Produto("36", "Pastel Especial", 11.0, 10);
+		Produto p4 = new Produto("100", "Refrigerante lata", 3.5, 80);
+
+		fachada.cadastrarProduto(p1);
+		fachada.cadastrarProduto(p2);
+		fachada.cadastrarProduto(p3);
+		fachada.cadastrarProduto(p4);
+
+		Comanda c = new Comanda(9);
+
+		fachada.adicionarComanda(c);
+
+		ItemDeComanda item = new ItemDeComanda(p1, 1);
+		ItemDeComanda item2 = new ItemDeComanda(p2, 1);
+		ItemDeComanda item3 = new ItemDeComanda(p3, 1);
+		ItemDeComanda item4 = new ItemDeComanda(p4, 1);
+
+		fachada.adicionarItemNaComanda(9, item);
+		fachada.adicionarItemNaComanda(9, item2);
+		fachada.adicionarItemNaComanda(9, item3);
+		fachada.adicionarItemNaComanda(9, item4);
+
+		double valor = fachada.fecharValorTotalDaComandaSemPorcentagem(c);
+
+		Assert.assertEquals(21.50, valor);
+
+	}
+
+	// //Em construção ... alguém me ajude!!!!!
+	@Test
+	public void atualizarCaixaAposUmaComandaPagaTest() {
+
+		Produto p1 = new Produto("2", "Cerveja", 4.0, 30);
+		Produto p2 = new Produto("3", "Suco", 3.0, 30);
+		Produto p3 = new Produto("36", "Pastel Especial", 11.0, 10);
+		Produto p4 = new Produto("100", "Refrigerante lata", 3.5, 80);
+
+		fachada.cadastrarProduto(p1);
+		fachada.cadastrarProduto(p2);
+		fachada.cadastrarProduto(p3);
+		fachada.cadastrarProduto(p4);
+
+		Comanda c = new Comanda(9);
+
+		fachada.adicionarComanda(c);
+
+		ItemDeComanda item = new ItemDeComanda(p1, 1);
+		ItemDeComanda item2 = new ItemDeComanda(p2, 1);
+		ItemDeComanda item3 = new ItemDeComanda(p3, 1);
+		ItemDeComanda item4 = new ItemDeComanda(p4, 1);
+
+		fachada.adicionarItemNaComanda(9, item);
+		fachada.adicionarItemNaComanda(9, item2);
+		fachada.adicionarItemNaComanda(9, item3);
+		fachada.adicionarItemNaComanda(9, item4);
+
+		double valor = fachada.fecharValorTotalDaComandaComPorcentagem(c);
+
+		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, false);
+		fachada.abrirCaixa(caixa);
+
+		fachada.adicionarValorPagoAoCaixa(caixa, valor, Recebimento.ESPÉCIE);
+
+		Assert.assertEquals(valor, caixa.getValores().get(0).getValorPago());
+
+	}
+
+	@Test
+	public void fechamentoDoCaixaDiarioTest() {
+
+	}
+
+	@Test
+	public void fechamentoDoCaixaMensalTest() {
+
 	}
 
 }

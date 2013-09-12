@@ -5,7 +5,6 @@ import java.util.List;
 
 import excecao.ExcecaoPastelaria;
 
-
 import negocio.Comanda;
 import negocio.ItemDeComanda;
 import negocio.Produto;
@@ -34,15 +33,16 @@ public class GerenteDeComanda {
 			if (comanda.getNumMesa() == numMesa) {
 				boolean jaTinha = false;
 				for (ItemDeComanda i : comanda.getItens()) {
-					if (i.getProduto().getCodigo() == item.getProduto().getCodigo()) {
+					if (i.getProduto().getCodigo() == item.getProduto()
+							.getCodigo()) {
 
 						int aux = i.getQtdeItem();
 						item.setQtdeItem(aux + item.getQtdeItem());
 						jaTinha = true;
-					} 
+					}
 				}
-				
-				if (!jaTinha){
+
+				if (!jaTinha) {
 					comanda.getItens().add(item);
 				}
 			}
@@ -54,11 +54,10 @@ public class GerenteDeComanda {
 
 		for (Comanda comanda : comandas) {
 			if (comanda.getNumMesa() == numMesa) {
-				
+
 				for (ItemDeComanda item : comanda.getItens()) {
 
-					if (item.getProduto().getCodigo()
-							.equals(codigo)) {
+					if (item.getProduto().getCodigo().equals(codigo)) {
 						return item;
 					}
 				}
@@ -71,7 +70,7 @@ public class GerenteDeComanda {
 	public boolean isRemoverItem(Comanda c, String codigo) {
 
 		ItemDeComanda item = this.pesquisarItem(c.getNumMesa(), codigo);
-		
+
 		if (item != null) {
 			c.getItens().remove(item);
 			return true;
@@ -87,8 +86,8 @@ public class GerenteDeComanda {
 			if (comanda.getNumMesa() == numMesa) {
 				for (ItemDeComanda i : comanda.getItens()) {
 
-					if (i.getProduto().getCodigo() == item
-							.getProduto().getCodigo()) {
+					if (i.getProduto().getCodigo() == item.getProduto()
+							.getCodigo()) {
 
 						int aux = i.getQtdeItem();
 						i.setQtdeItem(aux - qtdeDiminuida);
@@ -113,27 +112,69 @@ public class GerenteDeComanda {
 	}
 
 	public Comanda pesquisarComanda(int numMesa) {
-	
-		for(int i = 0; i< comandas.size();i++){
-			if(comandas.get(i).getNumMesa()==numMesa){
+
+		for (int i = 0; i < comandas.size(); i++) {
+			if (comandas.get(i).getNumMesa() == numMesa) {
 				return comandas.get(i);
 			}
 		}
 		throw new ExcecaoPastelaria("A comanda não existe");
 	}
 
-	
-
 	public boolean isRemoverComandaPermanentemente(int numMesa) {
 		// TODO Auto-generated method stub
-		for (Comanda comanda : comandas){
-			if(comanda.getNumMesa() == numMesa){
+		for (Comanda comanda : comandas) {
+			if (comanda.getNumMesa() == numMesa) {
 				comandas.remove(comanda);
 				return true;
 			}
 		}
-		
+
 		throw new ExcecaoPastelaria("A comanda não existe");
 	}
+
+	public double fecharTotalComandaComPorcentagemGarcon(Comanda c) {
+		
+		double valorTotal = 0;
+		
+		for (Comanda comanda : comandas) {
+			if (comanda.getNumMesa() == c.getNumMesa()) {
+				for (ItemDeComanda i : comanda.getItens()) {
+
+					valorTotal = valorTotal
+							+ (i.getProduto().getPreco() * i.getQtdeItem());
+
+				}
+			}
+
+		}
+		double valorMaisPorcentagem = (10 * valorTotal)/100;
+
+		return valorMaisPorcentagem + valorTotal;
+
+	}
+	
+public double fecharTotalComandaSemPorcentagemGarcon(Comanda c) {
+		
+		double valorTotal = 0;
+		
+		for (Comanda comanda : comandas) {
+			if (comanda.getNumMesa() == c.getNumMesa()) {
+				for (ItemDeComanda i : comanda.getItens()) {
+
+					valorTotal = valorTotal
+							+ (i.getProduto().getPreco() * i.getQtdeItem());
+
+				}
+			}
+
+		}
+	
+
+		return valorTotal;
+
+	}
+	
+	
 
 }

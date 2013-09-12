@@ -6,11 +6,13 @@ import gerenciadores.GerenteDeCaixa;
 import gerenciadores.GerenteDeComanda;
 import gerenciadores.GerenteDeEntregaDomicilio;
 import gerenciadores.GerenteDeEstoquePastelaria;
+import gerenciadores.Recebimento;
 import negocio.Caixa;
 import negocio.Cliente;
 import negocio.Comanda;
 import negocio.ItemDeComanda;
 import negocio.Produto;
+import negocio.ValorRecebido;
 
 public class PastelariaFacade {
 	
@@ -100,10 +102,10 @@ public class PastelariaFacade {
 		return caixa.pesquisarCaixasSalvos(dia, mes, ano);
 	}
 
-	public void realizarVenda(int numMesa, String codigo, int qtdeItem) {
+	//public void realizarVenda(int numMesa, String codigo, int qtdeItem) {
 		// TODO Auto-generated method stub
-		caixa.realizarVenda(numMesa, codigo, qtdeItem);
-	}
+		//caixa.realizarVenda(numMesa, codigo, qtdeItem);
+	//}
 
 	public void adicionarComanda(Comanda c) {
 		// TODO Auto-generated method stub
@@ -136,6 +138,21 @@ public class PastelariaFacade {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public double fecharValorTotalDaComandaComPorcentagem(Comanda c) {
+		// TODO Auto-generated method stub
+		return comanda.fecharTotalComandaComPorcentagemGarcon(c);
+	}
+	
+	public double fecharValorTotalDaComandaSemPorcentagem(Comanda c){
+		return comanda.fecharTotalComandaSemPorcentagemGarcon(c);
+	}
+	
+	public void adicionarValorPagoAoCaixa(Caixa c, double valor, Recebimento forma){
+		caixa.AdicionarValorRecebido(c, valor, forma );
+	}
+
+	
 
 
 }
