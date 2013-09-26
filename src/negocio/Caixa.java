@@ -10,17 +10,17 @@ public class Caixa {
 	private int ano;
 	private double dinheiroInicioDia;
 	private double dinheiroFimDia;
-	private boolean status;
+	private boolean aberto;
 	private List <ValorRecebido> valores = new ArrayList <ValorRecebido>();
 	
-	public Caixa(int dia, int mes, int ano, double dinheiroInicioDia, double dinheiroFimDia, boolean status) {
+	public Caixa(int dia, int mes, int ano, double dinheiroInicioDia, double dinheiroFimDia, boolean aberto) {
 		
 		this.dia = dia;
 		this.mes = mes;
 		this.ano = ano;
 		this.dinheiroInicioDia = dinheiroInicioDia;
 		this.dinheiroFimDia = dinheiroFimDia = 0;
-		this.status = status;
+		this.aberto = aberto;
 	}
 
 	public int getDia() {
@@ -71,12 +71,12 @@ public class Caixa {
 		this.valores = valores;
 	}
 
-	public boolean getStatus() {
-		return status;
+	public boolean getAberto() {
+		return aberto;
 	}
 
-	public void setStatus(boolean status) {
-		this.status = status;
+	public void setAberto(boolean aberto) {
+		this.aberto = aberto;
 	}
 	
 	

@@ -148,8 +148,13 @@ public class PastelariaFacade {
 		return comanda.fecharTotalComandaSemPorcentagemGarcon(c);
 	}
 	
-	public void adicionarValorPagoAoCaixa(Caixa c, double valor, Recebimento forma){
-		caixa.AdicionarValorRecebido(c, valor, forma );
+	public void adicionarValorRecebidoAoCaixa(Caixa c, ValorRecebido pagamento){
+		caixa.AdicionarValorRecebido(c, pagamento );
+	}
+
+	public double fecharCaixaDoDia(Caixa c) {
+		// TODO Auto-generated method stub
+		return caixa.fecharCaixaDia(c);
 	}
 
 	

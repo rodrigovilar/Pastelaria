@@ -26,8 +26,8 @@ public class GerenteDeCaixa {
 
 		}
 
-		c.setStatus(true);
-		c.getValores();
+		c.setAberto(true);
+		// c.getValores();
 		this.caixas.add(c);
 	}
 
@@ -44,38 +44,38 @@ public class GerenteDeCaixa {
 		throw new ExcecaoPastelaria("Não foi aberto o caixa neste dia");
 	}
 
-	public void AdicionarValorRecebido(Caixa caixa, double valor,
-			Recebimento forma) {
+	public void AdicionarValorRecebido(Caixa caixa, ValorRecebido pagamento) {
 
-		// double auxEspecie = 0;
-		// double auxDebito = 0;
-		// double auxCredito = 0;
-
-		ValorRecebido pago = new ValorRecebido(valor, forma);
-
-		if (caixa.getStatus() == true) {
-			for (Caixa c : caixas) {
-				if ((pago.getFormaPagamento() == forma)
-						&& (pago.getValorPago() == valor)) {
-					for (ValorRecebido v : c.getValores()) {
-						v = pago;
-
-						c.getValores().add(v);
+		for (Caixa c : caixas) {
+			if ((caixa.getAberto() == true)) {
+				boolean ja = false;
+				for (ValorRecebido v : c.getValores()) {
+					if (v.getFormaPagamento() == pagamento.getFormaPagamento()) {
+						ja = true;
 					}
 
 				}
+				if (!ja) {
+					c.getValores().add(pagamento);
+				}
+
 			}
 		}
-		/**
-		 * if (pago.getFormaPagamento() == formaPagamento.DEBITO) { auxEspecie
-		 * =+ auxEspecie; } if (pago.getFormaPagamento() ==
-		 * formaPagamento.CREDITO) { auxEspecie =+ auxDebito; } if
-		 * (pago.getFormaPagamento() == formaPagamento.ESPECIE) { auxEspecie =+
-		 * auxCredito; }
-	**/	 
 
 	}
-	
-	
+
+	public double fecharCaixaDia(Caixa caixa) {
+
+		double valorTotal = 0;
+		for (Caixa c : caixas) {
+			if (caixa.getAberto() == true) {
+				for (ValorRecebido v : c.getValores()) {
+					valorTotal = valorTotal + v.getValorPago();
+				}
+			}
+		}
+		caixa.setAberto(false);
+		return valorTotal;
+	}
 
 }

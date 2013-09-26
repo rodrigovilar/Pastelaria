@@ -1,5 +1,6 @@
 package gerenciadores;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,11 +133,12 @@ public class GerenteDeComanda {
 
 		throw new ExcecaoPastelaria("A comanda não existe");
 	}
+	
 
 	public double fecharTotalComandaComPorcentagemGarcon(Comanda c) {
-		
+
 		double valorTotal = 0;
-		
+
 		for (Comanda comanda : comandas) {
 			if (comanda.getNumMesa() == c.getNumMesa()) {
 				for (ItemDeComanda i : comanda.getItens()) {
@@ -148,16 +150,18 @@ public class GerenteDeComanda {
 			}
 
 		}
-		double valorMaisPorcentagem = (10 * valorTotal)/100;
-
-		return valorMaisPorcentagem + valorTotal;
+		
+		double valorMaisPorcentagem = (10 * valorTotal) / 100;
+		double resultado = valorMaisPorcentagem + valorTotal;
+		
+		return resultado;
 
 	}
-	
-public double fecharTotalComandaSemPorcentagemGarcon(Comanda c) {
-		
+
+	public double fecharTotalComandaSemPorcentagemGarcon(Comanda c) {
+
 		double valorTotal = 0;
-		
+
 		for (Comanda comanda : comandas) {
 			if (comanda.getNumMesa() == c.getNumMesa()) {
 				for (ItemDeComanda i : comanda.getItens()) {
@@ -169,8 +173,7 @@ public double fecharTotalComandaSemPorcentagemGarcon(Comanda c) {
 			}
 
 		}
-	
-
+		
 		return valorTotal;
 
 	}

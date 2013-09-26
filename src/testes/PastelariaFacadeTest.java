@@ -10,6 +10,7 @@ import negocio.Cliente;
 import negocio.Comanda;
 import negocio.ItemDeComanda;
 import negocio.Produto;
+import negocio.ValorRecebido;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -371,14 +372,6 @@ public class PastelariaFacadeTest {
 
 	}
 
-	/*
-	 * Um mesmo item pertence a várias comandas é estranho.
-	 * 
-	 * Problemas com a montagem do cenário de teste 3 pontos
-	 * 
-	 * Rodrigo, você tinha questionado isso, este
-	 */
-
 	@Test
 	public void removerItemDaComandaTest() {
 
@@ -646,9 +639,8 @@ public class PastelariaFacadeTest {
 
 	}
 
-	// //Em construção ... alguém me ajude!!!!!
 	@Test
-	public void atualizarCaixaAposUmaComandaPagaTest() {
+	public void adicionarUmValorRecebidoAoCaixaTest() {
 
 		Produto p1 = new Produto("2", "Cerveja", 4.0, 30);
 		Produto p2 = new Produto("3", "Suco", 3.0, 30);
@@ -676,17 +668,118 @@ public class PastelariaFacadeTest {
 
 		double valor = fachada.fecharValorTotalDaComandaComPorcentagem(c);
 
-		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, false);
+		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, true);
 		fachada.abrirCaixa(caixa);
 
-		fachada.adicionarValorPagoAoCaixa(caixa, valor, Recebimento.ESPÉCIE);
+		ValorRecebido pagamento = new ValorRecebido(valor, Recebimento.ESPÉCIE);
+
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento);
 
 		Assert.assertEquals(valor, caixa.getValores().get(0).getValorPago());
 
 	}
 
 	@Test
-	public void fechamentoDoCaixaDiarioTest() {
+	public void adicionarValoresTresRecebidosTest() {
+
+		Produto p1 = new Produto("2", "Cerveja", 4.0, 30);
+		Produto p2 = new Produto("3", "Suco", 3.0, 30);
+		Produto p3 = new Produto("36", "Pastel Especial", 11.0, 10);
+		Produto p4 = new Produto("100", "Refrigerante lata", 3.5, 80);
+
+		fachada.cadastrarProduto(p1);
+		fachada.cadastrarProduto(p2);
+		fachada.cadastrarProduto(p3);
+		fachada.cadastrarProduto(p4);
+
+		Comanda c = new Comanda(9);
+		Comanda c2 = new Comanda(10);
+		Comanda c3 = new Comanda(11);
+
+		fachada.adicionarComanda(c);
+		fachada.adicionarComanda(c2);
+		fachada.adicionarComanda(c3);
+
+		ItemDeComanda item = new ItemDeComanda(p1, 7);
+		ItemDeComanda item2 = new ItemDeComanda(p2, 6);
+		ItemDeComanda item3 = new ItemDeComanda(p3, 4);
+		ItemDeComanda item4 = new ItemDeComanda(p4, 5);
+
+		fachada.adicionarItemNaComanda(9, item);
+		fachada.adicionarItemNaComanda(9, item2);
+		fachada.adicionarItemNaComanda(10, item3);
+		fachada.adicionarItemNaComanda(11, item4);
+
+		double valor = fachada.fecharValorTotalDaComandaComPorcentagem(c);
+		double valor2 = fachada.fecharValorTotalDaComandaComPorcentagem(c2);
+		double valor3 = fachada.fecharValorTotalDaComandaComPorcentagem(c3);
+
+		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, true);
+		fachada.abrirCaixa(caixa);
+
+		ValorRecebido pagamento = new ValorRecebido(valor, Recebimento.ESPÉCIE);
+		ValorRecebido pagamento2 = new ValorRecebido(valor2,
+				Recebimento.CREDITO);
+		ValorRecebido pagamento3 = new ValorRecebido(valor3, Recebimento.DÉDITO);
+
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento2);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento3);
+
+		Assert.assertEquals(3, caixa.getValores().size());
+
+	}
+
+	@Test
+	public void fecharDoCaixaDoDiaTest() {
+
+		Produto p1 = new Produto("2", "Cerveja", 4.0, 30);
+		Produto p2 = new Produto("3", "Suco", 3.0, 30);
+		Produto p3 = new Produto("36", "Pastel Especial", 11.0, 10);
+		Produto p4 = new Produto("100", "Refrigerante lata", 3.5, 80);
+
+		fachada.cadastrarProduto(p1);
+		fachada.cadastrarProduto(p2);
+		fachada.cadastrarProduto(p3);
+		fachada.cadastrarProduto(p4);
+
+		Comanda c = new Comanda(9);
+		Comanda c2 = new Comanda(10);
+		Comanda c3 = new Comanda(11);
+
+		fachada.adicionarComanda(c);
+		fachada.adicionarComanda(c2);
+		fachada.adicionarComanda(c3);
+
+		ItemDeComanda item = new ItemDeComanda(p1, 1); // 4
+		ItemDeComanda item2 = new ItemDeComanda(p2, 1);// 3
+		ItemDeComanda item3 = new ItemDeComanda(p3, 1);// 11
+		ItemDeComanda item4 = new ItemDeComanda(p4, 1);// 3.5
+
+		fachada.adicionarItemNaComanda(9, item);
+		fachada.adicionarItemNaComanda(9, item2);
+		fachada.adicionarItemNaComanda(10, item3);
+		fachada.adicionarItemNaComanda(11, item4);
+
+		double valor = fachada.fecharValorTotalDaComandaComPorcentagem(c); // 7.70
+		double valor2 = fachada.fecharValorTotalDaComandaComPorcentagem(c2);// 12.1
+		double valor3 = fachada.fecharValorTotalDaComandaComPorcentagem(c3);// 3.85
+
+		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, true);
+		fachada.abrirCaixa(caixa);
+
+		ValorRecebido pagamento = new ValorRecebido(valor, Recebimento.ESPÉCIE);
+		ValorRecebido pagamento2 = new ValorRecebido(valor2,
+				Recebimento.CREDITO);
+		ValorRecebido pagamento3 = new ValorRecebido(valor3, Recebimento.DÉDITO);
+
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento2);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento3);
+
+		double caixaFechado = fachada.fecharCaixaDoDia(caixa);
+		// pesquisar como arredondar, ou só aparecer duas casas decimais
+		Assert.assertEquals(23.650000000000002, caixaFechado);
 
 	}
 
