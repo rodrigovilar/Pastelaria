@@ -2,6 +2,6 @@ package gerenciadores;
 
 public enum Recebimento {
 	
-	CARTÃO, DÉDITO, CREDITO, ESPÉCIE;
+	CARTAO, DEDITO, CREDITO, ESPECIE;
 
 }

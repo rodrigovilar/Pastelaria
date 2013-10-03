@@ -157,6 +157,11 @@ public class PastelariaFacade {
 		return caixa.fecharCaixaDia(c);
 	}
 
+	public double calcularValorEspecieDiaTest(Caixa caixa2) {
+		// TODO Auto-generated method stub
+		return caixa.CalcularValorPagoEmEspécieDia(caixa2);
+	}
+
 	
 
 

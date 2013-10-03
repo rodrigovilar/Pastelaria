@@ -21,7 +21,7 @@ public class GerenteDeCaixa {
 					&& this.caixas.get(i).getMes() == c.getMes()
 					&& this.caixas.get(i).getAno() == c.getAno()) {
 				throw new ExcecaoPastelaria(
-						"Data invalida, o caixa já foi aberto nesta data");
+						"Data invalida, o caixa jï¿½ foi aberto nesta data");
 			}
 
 		}
@@ -41,23 +41,24 @@ public class GerenteDeCaixa {
 				return this.caixas.get(i);
 			}
 		}
-		throw new ExcecaoPastelaria("Não foi aberto o caixa neste dia");
+		throw new ExcecaoPastelaria("Nï¿½o foi aberto o caixa neste dia");
 	}
 
 	public void AdicionarValorRecebido(Caixa caixa, ValorRecebido pagamento) {
 
 		for (Caixa c : caixas) {
 			if ((caixa.getAberto() == true)) {
-				boolean ja = false;
-				for (ValorRecebido v : c.getValores()) {
-					if (v.getFormaPagamento() == pagamento.getFormaPagamento()) {
-						ja = true;
-					}
-
-				}
-				if (!ja) {
-					c.getValores().add(pagamento);
-				}
+				c.getValores().add(pagamento);
+//				boolean ja = false;
+//				for (ValorRecebido v : c.getValores()) {
+//					if (v.getFormaPagamento() == pagamento.getFormaPagamento()) {
+//						ja = true;
+//					}
+//
+//				}
+//				if (!ja) {
+//					c.getValores().add(pagamento);
+//				}
 
 			}
 		}
@@ -70,6 +71,7 @@ public class GerenteDeCaixa {
 		for (Caixa c : caixas) {
 			if (caixa.getAberto() == true) {
 				for (ValorRecebido v : c.getValores()) {
+
 					valorTotal = valorTotal + v.getValorPago();
 				}
 			}
@@ -78,4 +80,21 @@ public class GerenteDeCaixa {
 		return valorTotal;
 	}
 
+	public double CalcularValorPagoEmEspÃ©cieDia(Caixa caixa) {
+
+		double valorTotal = 0;
+		for (Caixa c : caixas) {
+			if (caixa.getAberto() == true) {
+				for (ValorRecebido v : c.getValores()) {
+					
+					if (v.getFormaPagamento()==(Recebimento.ESPECIE)) {
+						valorTotal = valorTotal + v.getValorPago();
+						
+					}
+				}
+			}
+		}
+
+		return valorTotal;
+	}
 }

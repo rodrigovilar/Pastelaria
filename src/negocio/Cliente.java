@@ -7,11 +7,11 @@ public class Cliente {
 	private String endereco;
 	private String pontoRef;
 	
-	public Cliente(String nome, String telefone, String endereço, String pontoRef) {
+	public Cliente(String nome, String telefone, String endereco, String pontoRef) {
 		
 		this.nome = nome;
 		this.telefone = telefone;
-		this.endereco = endereço;
+		this.endereco = endereco;
 		this.pontoRef = pontoRef;
 	}
 
@@ -31,12 +31,12 @@ public class Cliente {
 		this.nome = nome;
 	}
 
-	public String getEndereço() {
+	public String getEndereco() {
 		return endereco;
 	}
 
-	public void setEndereço(String endereço) {
-		this.endereco = endereço;
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
 	}
 
 	public String getPontoRef() {
