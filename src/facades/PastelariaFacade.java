@@ -159,7 +159,7 @@ public class PastelariaFacade {
 
 	public double calcularValorEspecieDiaTest(Caixa caixa2) {
 		// TODO Auto-generated method stub
-		return caixa.CalcularValorPagoEmEspécieDia(caixa2);
+		return caixa.calcularValorPagoEmEspecie(caixa2);
 	}
 
 	

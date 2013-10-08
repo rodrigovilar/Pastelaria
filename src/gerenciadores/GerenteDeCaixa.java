@@ -80,7 +80,7 @@ public class GerenteDeCaixa {
 		return valorTotal;
 	}
 
-	public double CalcularValorPagoEmEspécieDia(Caixa caixa) {
+	public double calcularValorPagoEmEspecie(Caixa caixa) {
 
 		double valorTotal = 0;
 		for (Caixa c : caixas) {
