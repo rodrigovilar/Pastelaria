@@ -26,12 +26,14 @@ public class PastelariaFacadeTest {
 
 	@Before
 	public void inicializar() {
+		
 		fachada = new PastelariaFacade();
 
 	}
 
 	private Produto cadastrarProduto(String id, String nome, double preco,
 			int quantidade) {
+		
 		Produto p = new Produto(id, nome, preco, quantidade);
 		fachada.cadastrarProduto(p);
 		return p;
@@ -45,18 +47,21 @@ public class PastelariaFacadeTest {
 	}
 
 	private ItemDeComanda cadastrarProdutoEQtde(Produto p, int qtde) {
+		
 		ItemDeComanda item = new ItemDeComanda(p, qtde);
 		return item;
 	}
 
 	private ValorRecebido cadastrarValorRecebido(double valorPagamento,
 			Recebimento forma) {
+		
 		ValorRecebido pagamento = new ValorRecebido(valorPagamento, forma);
 		return pagamento;
 	}
 
 	private Cliente cadastrarCliente(String nome, String tel, String end,
 			String pontoRef) {
+		
 		Cliente cliente = new Cliente(nome, tel, end, pontoRef);
 		fachada.adicionarClienteNoSistema(cliente);
 		return cliente;
@@ -435,7 +440,7 @@ public class PastelariaFacadeTest {
 
 		ItemDeComanda item = this.cadastrarProdutoEQtde(p1, 2);
 		Comanda c = new Comanda(30);
-		
+
 		fachada.adicionarItemNaComanda(c.getNumMesa(), item);
 
 		fachada.visulizarUmaComanda(20);
@@ -648,13 +653,240 @@ public class PastelariaFacadeTest {
 		ValorRecebido pagamento = new ValorRecebido(valor, Recebimento.ESPECIE);
 		ValorRecebido pagamento2 = new ValorRecebido(valor2,
 				Recebimento.CREDITO);
-		ValorRecebido pagamento3 = new ValorRecebido(valor3, Recebimento.DEDITO);
+		ValorRecebido pagamento3 = new ValorRecebido(valor3, Recebimento.DEBITO);
 
 		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento);
 		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento2);
 		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento3);
 
 		Assert.assertEquals(3, caixa.getValores().size());
+
+	}
+
+	@Test
+	public void CalcularValorPagoEmEspecieTest() {
+
+		Produto p1 = cadastrarProduto("2", "Cerveja", 4.0, 30);
+
+		Comanda c1 = cadastrarComanda(9);
+		ItemDeComanda item1 = this.cadastrarProdutoEQtde(p1, 1);
+		fachada.adicionarItemNaComanda(c1.getNumMesa(), item1);
+		double valor1 = fachada.fecharValorTotalDaComandaComPorcentagem(c1);// 4.4
+
+		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, true);
+		fachada.abrirCaixa(caixa);
+
+		ValorRecebido pagamento1 = cadastrarValorRecebido(valor1,
+				Recebimento.ESPECIE);//
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento1);
+
+		double valorEspecie = fachada.calcularValorEspecieDiaTest(caixa);
+
+		Assert.assertEquals(4.40, valorEspecie);
+	}
+
+	@Test
+	public void calcularVariosValoresPagosEmEspecieDoDiaTest() {
+
+		Produto p1 = cadastrarProduto("2", "Cerveja", 4.0, 30);
+		Produto p2 = cadastrarProduto("3", "Suco", 3.0, 30);
+		Produto p3 = cadastrarProduto("36", "Pastel Especial", 11.0, 10);
+		Produto p4 = cadastrarProduto("100", "Refrigerante lata", 3.5, 80);
+
+		Comanda c1 = cadastrarComanda(9);
+		ItemDeComanda item1 = this.cadastrarProdutoEQtde(p1, 4);
+		fachada.adicionarItemNaComanda(c1.getNumMesa(), item1);
+		double valor1 = fachada.fecharValorTotalDaComandaComPorcentagem(c1);
+
+		Comanda c2 = cadastrarComanda(10);
+		ItemDeComanda item2 = this.cadastrarProdutoEQtde(p2, 4);
+		fachada.adicionarItemNaComanda(c2.getNumMesa(), item2);
+		double valor2 = fachada.fecharValorTotalDaComandaComPorcentagem(c2);
+
+		Comanda c3 = cadastrarComanda(11);
+		ItemDeComanda item3 = this.cadastrarProdutoEQtde(p3, 4);
+		fachada.adicionarItemNaComanda(c3.getNumMesa(), item3);
+		double valor3 = fachada.fecharValorTotalDaComandaComPorcentagem(c3);
+
+		Comanda c4 = cadastrarComanda(12);
+		ItemDeComanda item4 = this.cadastrarProdutoEQtde(p4, 4);
+		fachada.adicionarItemNaComanda(c4.getNumMesa(), item4);
+		double valor4 = fachada.fecharValorTotalDaComandaComPorcentagem(c4);
+
+		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, true);
+		fachada.abrirCaixa(caixa);
+
+		ValorRecebido pagamento1 = cadastrarValorRecebido(valor1,
+				Recebimento.CREDITO);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento1);
+
+		ValorRecebido pagamento2 = cadastrarValorRecebido(valor2,
+				Recebimento.ESPECIE);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento2);
+
+		ValorRecebido pagamento3 = cadastrarValorRecebido(valor3,
+				Recebimento.ESPECIE);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento3);
+
+		ValorRecebido pagamento4 = cadastrarValorRecebido(valor4,
+				Recebimento.DEBITO);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento4);
+
+		double valorEspecie = fachada.calcularValorEspecieDiaTest(caixa);
+
+		Assert.assertEquals(61.599999999999994, valorEspecie);
+
+	}
+
+	@Test
+	public void calcularValorPagoEmDebitoTest() {
+
+		Produto p1 = cadastrarProduto("2", "Cerveja", 4.0, 30);
+
+		Comanda c1 = cadastrarComanda(9);
+		ItemDeComanda item1 = this.cadastrarProdutoEQtde(p1, 1);
+		fachada.adicionarItemNaComanda(c1.getNumMesa(), item1);
+		double valor1 = fachada.fecharValorTotalDaComandaComPorcentagem(c1);// 4.4
+
+		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, true);
+		fachada.abrirCaixa(caixa);
+
+		ValorRecebido pagamento1 = cadastrarValorRecebido(valor1,
+				Recebimento.DEBITO);//
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento1);
+
+		double valorDebito = fachada.calcularValorDebitoDia(caixa);
+
+		Assert.assertEquals(4.40, valorDebito);
+
+	}
+
+	@Test
+	public void calcularVariosValoresPagosEmDebitoTest() {
+
+		Produto p1 = cadastrarProduto("2", "Cerveja", 4.0, 30);
+		Produto p2 = cadastrarProduto("3", "Suco", 3.0, 30);
+		Produto p3 = cadastrarProduto("36", "Pastel Especial", 11.0, 10);
+		Produto p4 = cadastrarProduto("100", "Refrigerante lata", 3.5, 80);
+
+		Comanda c1 = cadastrarComanda(9);
+		ItemDeComanda item1 = this.cadastrarProdutoEQtde(p1, 4);
+		fachada.adicionarItemNaComanda(c1.getNumMesa(), item1);
+		double valor1 = fachada.fecharValorTotalDaComandaComPorcentagem(c1);
+
+		Comanda c2 = cadastrarComanda(10);
+		ItemDeComanda item2 = this.cadastrarProdutoEQtde(p2, 4);
+		fachada.adicionarItemNaComanda(c2.getNumMesa(), item2);
+		double valor2 = fachada.fecharValorTotalDaComandaComPorcentagem(c2);
+
+		Comanda c3 = cadastrarComanda(11);
+		ItemDeComanda item3 = this.cadastrarProdutoEQtde(p3, 4);
+		fachada.adicionarItemNaComanda(c3.getNumMesa(), item3);
+		double valor3 = fachada.fecharValorTotalDaComandaComPorcentagem(c3);
+
+		Comanda c4 = cadastrarComanda(12);
+		ItemDeComanda item4 = this.cadastrarProdutoEQtde(p4, 4);
+		fachada.adicionarItemNaComanda(c4.getNumMesa(), item4);
+		double valor4 = fachada.fecharValorTotalDaComandaComPorcentagem(c4);
+
+		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, true);
+		fachada.abrirCaixa(caixa);
+
+		ValorRecebido pagamento1 = cadastrarValorRecebido(valor1,
+				Recebimento.DEBITO);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento1);
+
+		ValorRecebido pagamento2 = cadastrarValorRecebido(valor2,
+				Recebimento.ESPECIE);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento2);
+
+		ValorRecebido pagamento3 = cadastrarValorRecebido(valor3,
+				Recebimento.DEBITO);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento3);
+
+		ValorRecebido pagamento4 = cadastrarValorRecebido(valor4,
+				Recebimento.DEBITO);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento4);
+
+		double valorEspecie = fachada.calcularValorDebitoDia(caixa);
+
+		Assert.assertEquals(81.4, valorEspecie);
+
+	}
+
+	@Test
+	public void calcularValorPagoEmCreditoTest() {
+
+		Produto p1 = cadastrarProduto("2", "Cerveja", 4.0, 30);
+
+		Comanda c1 = cadastrarComanda(9);
+		ItemDeComanda item1 = this.cadastrarProdutoEQtde(p1, 1);
+		fachada.adicionarItemNaComanda(c1.getNumMesa(), item1);
+		double valor1 = fachada.fecharValorTotalDaComandaComPorcentagem(c1);
+
+		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, true);
+		fachada.abrirCaixa(caixa);
+
+		ValorRecebido pagamento1 = cadastrarValorRecebido(valor1,
+				Recebimento.CREDITO);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento1);
+
+		double valorCredito = fachada.calcularValorCreditoDia(caixa);
+
+		Assert.assertEquals(4.40, valorCredito);
+
+	}
+
+	@Test
+	public void calcularVariosValoresPagosEmCreditoTest() {
+
+		Produto p1 = cadastrarProduto("2", "Cerveja", 4.0, 30);
+		Produto p2 = cadastrarProduto("3", "Suco", 3.0, 30);
+		Produto p3 = cadastrarProduto("36", "Pastel Especial", 11.0, 10);
+		Produto p4 = cadastrarProduto("100", "Refrigerante lata", 3.5, 80);
+
+		Comanda c1 = cadastrarComanda(9);
+		ItemDeComanda item1 = this.cadastrarProdutoEQtde(p1, 4);
+		fachada.adicionarItemNaComanda(c1.getNumMesa(), item1);
+		double valor1 = fachada.fecharValorTotalDaComandaComPorcentagem(c1);
+
+		Comanda c2 = cadastrarComanda(10);
+		ItemDeComanda item2 = this.cadastrarProdutoEQtde(p2, 4);
+		fachada.adicionarItemNaComanda(c2.getNumMesa(), item2);
+		double valor2 = fachada.fecharValorTotalDaComandaComPorcentagem(c2);
+
+		Comanda c3 = cadastrarComanda(11);
+		ItemDeComanda item3 = this.cadastrarProdutoEQtde(p3, 4);
+		fachada.adicionarItemNaComanda(c3.getNumMesa(), item3);
+		double valor3 = fachada.fecharValorTotalDaComandaComPorcentagem(c3);
+
+		Comanda c4 = cadastrarComanda(12);
+		ItemDeComanda item4 = this.cadastrarProdutoEQtde(p4, 4);
+		fachada.adicionarItemNaComanda(c4.getNumMesa(), item4);
+		double valor4 = fachada.fecharValorTotalDaComandaComPorcentagem(c4);
+
+		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, true);
+		fachada.abrirCaixa(caixa);
+
+		ValorRecebido pagamento1 = cadastrarValorRecebido(valor1,
+				Recebimento.DEBITO);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento1);
+
+		ValorRecebido pagamento2 = cadastrarValorRecebido(valor2,
+				Recebimento.CREDITO);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento2);
+
+		ValorRecebido pagamento3 = cadastrarValorRecebido(valor3,
+				Recebimento.CREDITO);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento3);
+
+		ValorRecebido pagamento4 = cadastrarValorRecebido(valor4,
+				Recebimento.CREDITO);
+		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento4);
+
+		double valorCredito = fachada.calcularValorCreditoDia(caixa);
+
+		Assert.assertEquals(77.0, valorCredito);
 
 	}
 
@@ -702,7 +934,7 @@ public class PastelariaFacadeTest {
 		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento3);
 
 		ValorRecebido pagamento4 = cadastrarValorRecebido(valor4,
-				Recebimento.DEDITO);
+				Recebimento.DEBITO);
 		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento4);
 
 		double caixaFechado = fachada.fecharCaixaDoDia(caixa);
@@ -712,59 +944,15 @@ public class PastelariaFacadeTest {
 	}
 
 	@Test
-	public void fechamentoDoCaixaMensalTest() {
-
-	}
-
-	@Test
-	public void CalcularValorPagoEmEspecieTest() {
-
-		Produto p1 = cadastrarProduto("2", "Cerveja", 4.0, 30);
-
-		Comanda c1 = cadastrarComanda(9);
-		ItemDeComanda item1 = this.cadastrarProdutoEQtde(p1, 1);
-		fachada.adicionarItemNaComanda(c1.getNumMesa(), item1);
-		double valor1 = fachada.fecharValorTotalDaComandaComPorcentagem(c1);// 4.4
-
-		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, true);
-		fachada.abrirCaixa(caixa);
-
-		ValorRecebido pagamento1 = cadastrarValorRecebido(valor1,
-				Recebimento.ESPECIE);//
-		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento1);
-
-		double valorEspecie = fachada.calcularValorEspecieDiaTest(caixa);
-
-		Assert.assertEquals(4.40, valorEspecie);
-	}
-
-	@Test
-	public void CalcularVariosValoresPagoEmEspecieDoDiaTest() {
+	public void fecharCaixaMensalTest() {
 
 		Produto p1 = cadastrarProduto("2", "Cerveja", 4.0, 30);
 		Produto p2 = cadastrarProduto("3", "Suco", 3.0, 30);
-		Produto p3 = cadastrarProduto("36", "Pastel Especial", 11.0, 10);
-		Produto p4 = cadastrarProduto("100", "Refrigerante lata", 3.5, 80);
 
 		Comanda c1 = cadastrarComanda(9);
 		ItemDeComanda item1 = this.cadastrarProdutoEQtde(p1, 4);
 		fachada.adicionarItemNaComanda(c1.getNumMesa(), item1);
 		double valor1 = fachada.fecharValorTotalDaComandaComPorcentagem(c1);
-
-		Comanda c2 = cadastrarComanda(10);
-		ItemDeComanda item2 = this.cadastrarProdutoEQtde(p2, 4);
-		fachada.adicionarItemNaComanda(c2.getNumMesa(), item2);
-		double valor2 = fachada.fecharValorTotalDaComandaComPorcentagem(c2);
-
-		Comanda c3 = cadastrarComanda(11);
-		ItemDeComanda item3 = this.cadastrarProdutoEQtde(p3, 4);
-		fachada.adicionarItemNaComanda(c3.getNumMesa(), item3);
-		double valor3 = fachada.fecharValorTotalDaComandaComPorcentagem(c3);
-
-		Comanda c4 = cadastrarComanda(12);
-		ItemDeComanda item4 = this.cadastrarProdutoEQtde(p4, 4);
-		fachada.adicionarItemNaComanda(c4.getNumMesa(), item4);
-		double valor4 = fachada.fecharValorTotalDaComandaComPorcentagem(c4);
 
 		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, true);
 		fachada.abrirCaixa(caixa);
@@ -773,58 +961,25 @@ public class PastelariaFacadeTest {
 				Recebimento.CREDITO);
 		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento1);
 
+		fachada.fecharCaixaDoDia(caixa);
+
+		Comanda c2 = cadastrarComanda(10);
+		ItemDeComanda item2 = this.cadastrarProdutoEQtde(p2, 4);
+		fachada.adicionarItemNaComanda(c2.getNumMesa(), item2);
+		double valor2 = fachada.fecharValorTotalDaComandaComPorcentagem(c2);// 17.60
+
+		Caixa caixa2 = new Caixa(12, 04, 2013, 0, 0, true);
+		fachada.abrirCaixa(caixa2);
+
 		ValorRecebido pagamento2 = cadastrarValorRecebido(valor2,
 				Recebimento.ESPECIE);
-		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento2);
+		fachada.adicionarValorRecebidoAoCaixa(caixa2, pagamento2);// 13.2
 
-		ValorRecebido pagamento3 = cadastrarValorRecebido(valor3,
-				Recebimento.ESPECIE);
-		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento3);
+		fachada.fecharCaixaDoDia(caixa2);
 
-		ValorRecebido pagamento4 = cadastrarValorRecebido(valor4,
-				Recebimento.DEDITO);
-		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento4);
+		double valorTotalMes = fachada.fecharCaixaMensal();
 
-		double valorEspecie = fachada.calcularValorEspecieDiaTest(caixa);
-
-		Assert.assertEquals(61.599999999999994, valorEspecie);
-
-	}
-
-	@Test
-	public void EscolherFormaDEpagamentoDeNOvo() {
-
-		Produto p1 = cadastrarProduto("2", "Cerveja", 4.0, 30);
-		Produto p2 = cadastrarProduto("3", "Suco", 3.0, 30);
-		Produto p3 = cadastrarProduto("36", "Pastel Especial", 11.0, 10);
-		Produto p4 = cadastrarProduto("100", "Refrigerante lata", 3.5, 80);
-		Produto p5 = cadastrarProduto("18", "sobrimesa", 5.25, 90);
-		Produto p6 = cadastrarProduto("8", "coxinha de frango", 4, 30);
-
-		Comanda c = new Comanda(9);
-		fachada.adicionarComanda(c);
-		ItemDeComanda item1c = new ItemDeComanda(p1, 1);// 4
-		ItemDeComanda item2c = new ItemDeComanda(p2, 1);// 3
-		ItemDeComanda item3c = new ItemDeComanda(p6, 1);// 4
-		fachada.adicionarItemNaComanda(9, item1c);
-		fachada.adicionarItemNaComanda(9, item2c);
-		fachada.adicionarItemNaComanda(9, item3c);
-
-		double valor = fachada.fecharValorTotalDaComandaComPorcentagem(c); // 11
-
-		Caixa caixa = new Caixa(10, 04, 2013, 0, 0, true);
-		fachada.abrirCaixa(caixa);
-
-		ValorRecebido pagamento = new ValorRecebido(valor, Recebimento.CREDITO);
-
-		// cartão sem limite ou pensou melhor na hora de pagar
-
-		pagamento = new ValorRecebido(valor, Recebimento.ESPECIE);
-
-		fachada.adicionarValorRecebidoAoCaixa(caixa, pagamento);
-
-		Assert.assertEquals(pagamento.getFormaPagamento(), Recebimento.ESPECIE);
-
+		Assert.assertEquals(30.80, valorTotalMes);
 	}
 
 }

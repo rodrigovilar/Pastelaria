@@ -49,16 +49,6 @@ public class GerenteDeCaixa {
 		for (Caixa c : caixas) {
 			if ((caixa.getAberto() == true)) {
 				c.getValores().add(pagamento);
-//				boolean ja = false;
-//				for (ValorRecebido v : c.getValores()) {
-//					if (v.getFormaPagamento() == pagamento.getFormaPagamento()) {
-//						ja = true;
-//					}
-//
-//				}
-//				if (!ja) {
-//					c.getValores().add(pagamento);
-//				}
 
 			}
 		}
@@ -74,12 +64,27 @@ public class GerenteDeCaixa {
 
 					valorTotal = valorTotal + v.getValorPago();
 				}
+				
 			}
+			caixa.setAberto(false);
 		}
-		caixa.setAberto(false);
+		
+		caixa.setDinheiroFimDia(valorTotal);
 		return valorTotal;
 	}
 
+	public double fecharCaixaMensal() {
+		
+		double valorTotal = 0 ;
+		for (Caixa c : caixas){
+			if (c.getAberto() == false){
+				
+				valorTotal = c.getDinheiroFimDia();
+			}
+		}
+		return valorTotal;
+	}
+	
 	public double calcularValorPagoEmEspecie(Caixa caixa) {
 
 		double valorTotal = 0;
@@ -97,4 +102,42 @@ public class GerenteDeCaixa {
 
 		return valorTotal;
 	}
+
+	public double calcularValorPagoEmDebito(Caixa caixa) {
+		double valorTotal = 0;
+		for (Caixa c : caixas) {
+			if (caixa.getAberto() == true) {
+				for (ValorRecebido v : c.getValores()) {
+					
+					if (v.getFormaPagamento()==(Recebimento.DEBITO)) {
+						valorTotal = valorTotal + v.getValorPago();
+						
+					}
+				}
+			}
+		}
+
+		return valorTotal;
+	}
+
+	public double calcularValorPagoEmCrédito(Caixa caixa) {
+		double valorTotal = 0;
+		for (Caixa c : caixas) {
+			if (caixa.getAberto() == true) {
+				for (ValorRecebido v : c.getValores()) {
+					
+					if (v.getFormaPagamento()==(Recebimento.CREDITO)) {
+						valorTotal = valorTotal + v.getValorPago();
+						
+					}
+				}
+			}
+		}
+
+		return valorTotal;
+	}
+
+	
+
+	
 }

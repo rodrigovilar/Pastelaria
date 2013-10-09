@@ -162,6 +162,21 @@ public class PastelariaFacade {
 		return caixa.calcularValorPagoEmEspecie(caixa2);
 	}
 
+	public double calcularValorDebitoDia(Caixa caixa2) {
+		// TODO Auto-generated method stub
+		return caixa.calcularValorPagoEmDebito(caixa2);
+	}
+
+	public double calcularValorCreditoDia(Caixa caixa2) {
+		// TODO Auto-generated method stub
+		return caixa.calcularValorPagoEmCrédito(caixa2);
+	}
+
+	public double fecharCaixaMensal() {
+		// TODO Auto-generated method stub
+		return caixa.fecharCaixaMensal();
+	}
+
 	
 
 
